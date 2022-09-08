@@ -1,11 +1,18 @@
 package com.sept.sept_challenge.model;
+import java.util.Objects;
 
-public class Item {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
+public
+class Item {
 
     public Item(){
 
     }
-    private String id;
+    private @Id @GeneratedValue String id;
     private String name;
     private String desc;
     private double price;
