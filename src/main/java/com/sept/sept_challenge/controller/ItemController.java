@@ -9,38 +9,43 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-@Controller
-@ResponseBody
-@RequestMapping("/item")
+@RestController
 public class ItemController {
 
-    @Autowired
-    ItemDao itemDao;
+    private final ItemDao itemDao;
 
-    @GetMapping("/{id}")
-    public @ResponseBody Item getTreeById(@PathVariable int id) {
-        System.out.println(itemDao.getItem(id));
+    ItemController(ItemDao itemDao) {
+        this.itemDao = itemDao;
+    }
+
+    @GetMapping("/item/{id}")
+    Item getItem(@PathVariable int id) {
         return itemDao.getItem(id);
     }
 
     @GetMapping("/item")
-    public @ResponseBody Collection<Item> getItemList() {
-        return itemDao.getAllItem();
+    Collection<Item> all() {
+        return ItemDao.getAllItem();
     }
 
-    @PostMapping
-    public Item createItem(Item item) {
-        itemDao.save(item);
-        return item;
+    @PostMapping("/item")
+    @ResponseBody
+    public Item addItem(@RequestParam(name = "id") String id, @RequestParam String name, @RequestParam String desc
+    , @RequestParam double price) {
+    Item item = new Item(id, name, desc, price);
+    itemDao.save(item);
+    return item;
     }
 
     @PutMapping("/item")
-    public void update(int id){
+    @ResponseBody
+    public void update(@RequestParam int id){
         itemDao.update(id);
     }
 
     @DeleteMapping("/item")
-    public void delete(int id){
+    @ResponseBody
+    void deleteEmployee(@RequestParam  int id) {
         itemDao.delete(id);
     }
 
